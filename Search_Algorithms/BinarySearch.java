@@ -1,42 +1,48 @@
-import java.util.Random;
 import java.util.Arrays;
+import java.util.Scanner;
 
 class BinarySearch {
-    private static final int evenLength = 10;
-    private static final int oddLength = 11;
+    static Scanner userInput = new Scanner(System.in);
+
+    public static int search(int[] array, int start, int end, int target) {
+        int middle = start + ((end - start) / 2);
+
+        if(array[middle] == target) {
+            return middle;
+        }
+
+        else if((end - start) != 0) {
+            if(target < array[middle]) {
+                return search(array, start, middle - 1, target);
+            }
+
+            // target > array[middle]
+            else if(target > array[middle]) {
+                return search(array, middle + 1, end, target);
+            }
+        }
+
+        return -1;
+    }
 
     public static void main(String args[]) {
-        Random randomArrayElement = new Random(System.currentTimeMillis());
+        // Sample (sorted) array for showing the function of binary search
+        int[] sortedArray = {2, 6, 13, 32, 45, 73, 101, 251, 721};
 
         // Introduction to program
-        System.out.println("This program gives an example of binary search in Java (on an already sorted array)\n");
+        System.out.println("\nThis program gives an example of binary search in Java (on an already sorted array).\n\nBelow is the sample array I'll be working with:\n" + Arrays.toString(sortedArray) + "\n");
 
+        System.out.print("What number would you like to search for? (Doesn't have to be in the array): ");
+        int target = userInput.nextInt();
 
-        
-        // Create a random, sorted array of even length
-        int[] evenArray = new int[evenLength];
-        for(int i = 0; i < evenLength; i++) {
-            if(i == 0) {
-                evenArray[i] = randomArrayElement.nextInt(10);
-            } else {
-                evenArray[i] = evenArray[i - 1] + randomArrayElement.nextInt(10);
-            }
+        int result = search(sortedArray, 0, (sortedArray.length - 1), target);
+
+        if(result < 0) {
+            System.out.println("\nYour number was not found in the array.\n");
+        } else {
+            System.out.println("\nYour number was found at index " + result + ".\n");
         }
 
-        System.out.println("EVEN\nThis is the random array: " + Arrays.toString(evenArray));
-
-
-
-        // Create a random, sorted array of even length
-        int[] oddArray = new int[oddLength];
-        for(int i = 0; i < oddLength; i++) {
-            if(i == 0) {
-                oddArray[i] = randomArrayElement.nextInt(10);
-            } else {
-                oddArray[i] = oddArray[i - 1] + randomArrayElement.nextInt(10);
-            }
-        }
-
-        System.out.println("ODD\nThis is the random array: " + Arrays.toString(oddArray));
+        userInput.close();
     }
 }
